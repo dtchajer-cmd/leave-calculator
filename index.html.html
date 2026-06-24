@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leave Balance Calculator</title>
+
+<style>
+:root{
+    --primary:#2563eb;
+    --primary-hover:#1d4ed8;
+    --success:#16a34a;
+    --danger:#dc2626;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --text:#1f2937;
+    --border:#e5e7eb;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#eff6ff,#dbeafe);
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:450px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:20px;
+    padding:30px;
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.08),
+        0 5px 10px rgba(0,0,0,.05);
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    font-size:1.8rem;
+    color:var(--text);
+    margin-bottom:8px;
+}
+
+.header p{
+    color:#6b7280;
+    font-size:.95rem;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:var(--text);
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    font-size:15px;
+    transition:.25s;
+}
+
+input:focus{
+    outline:none;
+    border-color:var(--primary);
+    box-shadow:0 0 0 4px rgba(37,99,235,.15);
+}
+
+button{
+    width:100%;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    background:var(--primary);
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+button:hover{
+    background:var(--primary-hover);
+    transform:translateY(-1px);
+}
+
+.result{
+    margin-top:22px;
+    display:none;
+    padding:18px;
+    border-radius:14px;
+    background:#f8fafc;
+    border:1px solid var(--border);
+}
+
+.result h3{
+    margin-bottom:10px;
+    color:var(--text);
+}
+
+.result-item{
+    display:flex;
+    justify-content:space-between;
+    margin:8px 0;
+    font-size:15px;
+}
+
+.remaining{
+    margin-top:15px;
+    text-align:center;
+    font-size:1.4rem;
+    font-weight:700;
+    color:var(--success);
+}
+
+.error{
+    color:var(--danger);
+    text-align:center;
+    margin-top:12px;
+    font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <div class="header">
+            <h1>Leave Calculator</h1>
+            <p>Calculate remaining leave balance after leave deduction</p>
+        </div>
+
+        <div class="form-group">
+            <label for="balance">Current Balance (Days)</label>
+            <input
+                type="number"
+                id="balance"
+                step="0.01"
+                min="0"
+                placeholder="Example: 2.90">
+        </div>
+
+        <div class="form-group">
+            <label for="hours">Leave Hours</label>
+            <input
+                type="number"
+                id="hours"
+                step="0.1"
+                min="0"
+                placeholder="Example: 3">
+        </div>
+
+        <button id="calculateBtn">
+            Calculate Balance
+        </button>
+
+        <div id="error" class="error"></div>
+
+        <div id="result" class="result">
+            <h3>Calculation Summary</h3>
+
+            <div class="result-item">
+                <span>Current Balance</span>
+                <span id="currentBalance"></span>
+            </div>
+
+            <div class="result-item">
+                <span>Leave Hours</span>
+                <span id="leaveHours"></span>
+            </div>
+
+            <div class="result-item">
+                <span>Deducted Days</span>
+                <span id="deductedDays"></span>
+            </div>
+
+            <div class="remaining" id="remainingBalance"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const DAY_HOURS = 9;
+
+document
+    .getElementById("calculateBtn")
+    .addEventListener("click", calculate);
+
+function calculate() {
+
+    const balance =
+        parseFloat(document.getElementById("balance").value);
+
+    const hours =
+        parseFloat(document.getElementById("hours").value);
+
+    const errorElement =
+        document.getElementById("error");
+
+    const resultElement =
+        document.getElementById("result");
+
+    errorElement.textContent = "";
+    resultElement.style.display = "none";
+
+    if (isNaN(balance) || isNaN(hours)) {
+        errorElement.textContent =
+            "Please enter valid values.";
+        return;
+    }
+
+    // SAME LOGIC AS YOUR ORIGINAL CODE
+    const deductedDays = hours / DAY_HOURS;
+    const remaining = balance - deductedDays;
+
+    document.getElementById("currentBalance").textContent =
+        `${balance.toFixed(2)} Days`;
+
+    document.getElementById("leaveHours").textContent =
+        `${hours} Hours`;
+
+    document.getElementById("deductedDays").textContent =
+        deductedDays.toFixed(2);
+
+    document.getElementById("remainingBalance").textContent =
+        `Remaining Balance: ${remaining.toFixed(2)} Days`;
+
+    resultElement.style.display = "block";
+}
+</script>
+
+</body>
+</html>
